@@ -48,6 +48,6 @@ public class SoundFilterIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
+        Log.d("blah", "onHandleIntent");
     }
 }
