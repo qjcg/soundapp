@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.sql.Connection;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -18,10 +20,12 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
 
-public class MainActivity extends Activity implements DataApi.DataListener{
+public class MainActivity extends Activity implements WearClient.Listener {
 
+      WearClient client;
 
     public void applyHappyFilter (View view) {
         Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
@@ -44,6 +48,7 @@ public class MainActivity extends Activity implements DataApi.DataListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       client = new WearClient(new GoogleApiClient.Builder(this), this);
     }
 
 
@@ -67,12 +72,12 @@ public class MainActivity extends Activity implements DataApi.DataListener{
     }
 
    @Override
-   public void onDataChanged(DataEventBuffer dataEvents) {
-      for (DataEvent dataEvent : dataEvents){
-         if(dataEvent.getDataItem().getUri().getPath().equals("/sound")){
-            DataMap result = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
-            result.getString("data");
+   public void onSoundReceived( final DataMap result) {
+      this.runOnUiThread(new Runnable() {
+         @Override
+         public void run() {
+            Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
          }
-      }
+      });
    }
 }
