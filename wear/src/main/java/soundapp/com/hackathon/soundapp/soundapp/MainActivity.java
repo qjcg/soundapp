@@ -13,16 +13,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.b;
+
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    boolean recording = false;
-    AudioRecord audioRecord;
-    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.3gp";
-    int bufSize = 44100 * 2 * 1 * 2;
 
+    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.pcm";
+    Recorder recorder = new ServiceRecorder(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,23 +37,14 @@ public class MainActivity extends Activity {
                 stub.findViewById(R.id.record).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!recording) {
-                            audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufSize);
-
-                            audioRecord.startRecording();
-                            recording = true;
+                        if (!recorder.isRecording()) {
+                            recorder.startRecording();
                             ((TextView) view).setText(R.string.stop);
                         } else {
                             ((TextView) view).setText(R.string.record);
 
-                            byte[] buf = new byte[bufSize];
-                            audioRecord.read(buf, 0, bufSize);
-                            audioRecord.stop();
-                            try {
-                                new FileOutputStream(mFileName).write(buf, 0, bufSize);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            recorder.stopRecording();
+
                             MediaPlayer player = new MediaPlayer();
                             try {
                                 player.setDataSource(mFileName);
@@ -60,7 +52,6 @@ public class MainActivity extends Activity {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            recording = false;
                         }
                     }
                 });
