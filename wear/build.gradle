@@ -6,7 +6,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "soundapp.hackathon.com.soundapp"
+        applicationId "soundapp.com.hackathon.soundapp.soundapp"
         minSdkVersion 20
         targetSdkVersion 21
         versionCode 1

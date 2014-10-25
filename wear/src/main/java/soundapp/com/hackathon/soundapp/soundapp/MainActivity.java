@@ -1,4 +1,4 @@
-package soundapp.hackathon.com.soundapp;
+package soundapp.com.hackathon.soundapp.soundapp;
 
 import android.app.Activity;
 import android.content.Context;
