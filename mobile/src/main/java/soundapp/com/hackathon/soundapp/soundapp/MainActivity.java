@@ -6,9 +6,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
+import java.sql.Connection;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -17,10 +20,12 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
 
-public class MainActivity extends Activity implements DataApi.DataListener{
+public class MainActivity extends Activity implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener{
 
+   GoogleApiClient client;
 
     public void applyFilter1 (View view) {
         Log.d("soundapp", "applyFilter1");
@@ -36,6 +41,11 @@ public class MainActivity extends Activity implements DataApi.DataListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+      client = new GoogleApiClient.Builder(this)
+              .addApi(Wearable.API)
+              .addConnectionCallbacks(this).build();
+       client.connect();
 
     }
 
@@ -63,9 +73,33 @@ public class MainActivity extends Activity implements DataApi.DataListener{
    public void onDataChanged(DataEventBuffer dataEvents) {
       for (DataEvent dataEvent : dataEvents){
          if(dataEvent.getDataItem().getUri().getPath().equals("/sound")){
-            DataMap result = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
-            result.getString("data");
+            final DataMap result = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
+            this.runOnUiThread(new Runnable() {
+               @Override
+               public void run() {
+                  Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
+               }
+            });
+
+
+
          }
       }
+   }
+
+   @Override
+   public void onConnected(Bundle bundle) {
+      Wearable.DataApi.addListener(client, this);
+      Wearable.MessageApi.addListener(client, this);
+   }
+
+   @Override
+   public void onConnectionSuspended(int i) {
+
+   }
+
+   @Override
+   public void onMessageReceived(MessageEvent messageEvent) {
+//      Toast.makeText(this, "message Received", Toast.LENGTH_SHORT).show();
    }
 }
