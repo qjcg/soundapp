@@ -9,3 +9,8 @@ record short clips &amp; apply FX
 - [AudioTrack](http://developer.android.com/reference/android/media/AudioTrack.html)
 - [SoundPool](http://developer.android.com/reference/android/media/SoundPool.html)
 - [android.media.audiofx](http://developer.android.com/reference/android/media/audiofx/package-summary.html)
+- 
+
+# Links
+- [Live Hangout](http://whocl.com/9jy0O6)
+
