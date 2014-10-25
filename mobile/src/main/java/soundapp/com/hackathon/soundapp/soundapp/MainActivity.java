@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -22,14 +23,20 @@ import com.google.android.gms.wearable.MessageEvent;
 public class MainActivity extends Activity implements DataApi.DataListener{
 
 
-    public void applyFilter1 (View view) {
-        Log.d("soundapp", "applyFilter1");
+    public void applyHappyFilter (View view) {
+        Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
     }
-    public void applyFilter2 (View view) {
-        Log.d("soundapp", "applyFilter2");
+
+    public void applyDarkFilter (View view) {
+        Toast.makeText(this.getApplicationContext(), "applyDarkFilter", Toast.LENGTH_LONG).show();
     }
+
     public void playSound (View view) {
-        Log.d("soundapp", "play");
+        Toast.makeText(this.getApplicationContext(), "playSound", Toast.LENGTH_LONG).show();
+    }
+
+    public void applyEchoFilter (View view) {
+        Toast.makeText(this.getApplicationContext(), "applyEchoFilter", Toast.LENGTH_LONG).show();
     }
 
     @Override
