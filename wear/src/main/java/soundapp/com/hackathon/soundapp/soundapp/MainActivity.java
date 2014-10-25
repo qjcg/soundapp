@@ -26,9 +26,9 @@ import soundapp.com.hackathon.soundapp.soundapp.utilities.PhoneClient;
 public class MainActivity extends Activity {
 
 
-    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.pcm";
-    Recorder recorder = new ServiceRecorder(this);
-    PhoneClient client;
+    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.wav";
+    Recorder recorder = new ARRecorder(mFileName);
+	PhoneClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

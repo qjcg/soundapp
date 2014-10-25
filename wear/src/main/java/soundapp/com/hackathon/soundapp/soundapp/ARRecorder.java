@@ -5,9 +5,11 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by niluge on 25/10/14.
@@ -17,7 +19,7 @@ public class ARRecorder implements  Recorder {
     AudioRecord audioRecord;
     private static final int RECORDER_SAMPLERATE = 44100;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_DEFAULT;
+    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     String mFileName;
 
@@ -46,7 +48,7 @@ public class ARRecorder implements  Recorder {
     @Override
     public void startRecording() {
 
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.DEFAULT,
                 RECORDER_SAMPLERATE, RECORDER_CHANNELS,
                 RECORDER_AUDIO_ENCODING, bufSize);
 
@@ -67,7 +69,7 @@ public class ARRecorder implements  Recorder {
 
         FileOutputStream os = null;
         try {
-            os = new FileOutputStream(mFileName);
+            os = new FileOutputStream(mFileName + ".pcm");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -90,6 +92,26 @@ public class ARRecorder implements  Recorder {
             os.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        // Recording finished, convert to wav
+        try {
+            os = new FileOutputStream(mFileName);
+            InputStream is = new FileInputStream(mFileName + ".pcm");
+            WaveHeader header = new WaveHeader(WaveHeader.FORMAT_PCM, (short) 1, 44100, (short) 16, is.available());
+            header.write(os);
+            byte[] buf = new byte[2048];
+            int red = -1;
+            while ((red = is.read(buf, 0, buf.length)) > -1) {
+                os.write(buf, 0, red);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
