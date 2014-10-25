@@ -6,5 +6,6 @@
         android:icon="@drawable/ic_launcher" />
 
     <service android:name=".AudioService" />
+    <service android:name=".SoundFilterIntentService" />
 
 </manifest>
