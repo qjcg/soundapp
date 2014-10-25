@@ -25,5 +25,7 @@ proguard/
 
 # Android studio
 .idea
+*.iml
+
 # Log Files
 *.log
