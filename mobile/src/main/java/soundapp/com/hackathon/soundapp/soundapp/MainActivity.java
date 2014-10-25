@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.File;
+
 
 public class MainActivity extends Activity {
 
@@ -14,6 +16,13 @@ public class MainActivity extends Activity {
     public void applyFilter1 (View view) {
         Log.d("soundapp", "applyFilter1");
     }
+    public void applyFilter2 (View view) {
+        Log.d("soundapp", "applyFilter2");
+    }
+    public void playSound (View view) {
+        Log.d("soundapp", "play");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
