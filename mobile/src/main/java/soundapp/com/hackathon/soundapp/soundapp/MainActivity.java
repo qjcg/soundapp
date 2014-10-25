@@ -7,17 +7,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.File;
 
-public class MainActivity extends Activity {
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+
+
+public class MainActivity extends Activity implements DataApi.DataListener{
 
 
     public void applyFilter1 (View view) {
         Log.d("soundapp", "applyFilter1");
     }
+    public void applyFilter2 (View view) {
+        Log.d("soundapp", "applyFilter2");
+    }
+    public void playSound (View view) {
+        Log.d("soundapp", "play");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
 
@@ -39,4 +58,14 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+   @Override
+   public void onDataChanged(DataEventBuffer dataEvents) {
+      for (DataEvent dataEvent : dataEvents){
+         if(dataEvent.getDataItem().getUri().getPath().equals("/sound")){
+            DataMap result = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
+            result.getString("data");
+         }
+      }
+   }
 }

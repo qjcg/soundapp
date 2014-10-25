@@ -14,21 +14,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.internal.b;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import soundapp.com.hackathon.soundapp.soundapp.utilities.PhoneClient;
+
 public class MainActivity extends Activity {
 
 
-    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.pcm";
-    Recorder recorder = new ServiceRecorder(this);
+    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.wav";
+    Recorder recorder = new ARRecorder(mFileName);
+	PhoneClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //mFileName = getFilesDir().getAbsolutePath() + "/test.wav";
         setContentView(R.layout.activity_main);
+
+       GoogleApiClient apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+       apiClient.connect();
+       client = new PhoneClient(apiClient);
+
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
 
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -55,6 +66,13 @@ public class MainActivity extends Activity {
                         }
                     }
                 });
+
+               stub.findViewById(R.id.sendMessage).setOnClickListener(new View.OnClickListener(){
+                  @Override
+                  public void onClick(View v) {
+                     client.sendSound(null);
+                  }
+               });
             }
         });
     }
