@@ -7,9 +7,12 @@
     tools:context=".MainActivity"
     tools:deviceIds="wear_square">
 
-    <TextView
-        android:id="@+id/text"
+    <Button
+        android:id="@+id/record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_square" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/record" />
+
 </LinearLayout>
