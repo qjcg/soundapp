@@ -23,9 +23,9 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
 
-public class MainActivity extends Activity implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener{
+public class MainActivity extends Activity implements WearClient.Listener {
 
-   GoogleApiClient client;
+      WearClient client;
 
     public void applyFilter1 (View view) {
         Log.d("soundapp", "applyFilter1");
@@ -42,11 +42,7 @@ public class MainActivity extends Activity implements DataApi.DataListener, Goog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-      client = new GoogleApiClient.Builder(this)
-              .addApi(Wearable.API)
-              .addConnectionCallbacks(this).build();
-       client.connect();
-
+       client = new WearClient(new GoogleApiClient.Builder(this), this);
     }
 
 
@@ -70,36 +66,12 @@ public class MainActivity extends Activity implements DataApi.DataListener, Goog
     }
 
    @Override
-   public void onDataChanged(DataEventBuffer dataEvents) {
-      for (DataEvent dataEvent : dataEvents){
-         if(dataEvent.getDataItem().getUri().getPath().equals("/sound")){
-            final DataMap result = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
-            this.runOnUiThread(new Runnable() {
-               @Override
-               public void run() {
-                  Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
-               }
-            });
-
-
-
+   public void onSoundReceived( final DataMap result) {
+      this.runOnUiThread(new Runnable() {
+         @Override
+         public void run() {
+            Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
          }
-      }
-   }
-
-   @Override
-   public void onConnected(Bundle bundle) {
-      Wearable.DataApi.addListener(client, this);
-      Wearable.MessageApi.addListener(client, this);
-   }
-
-   @Override
-   public void onConnectionSuspended(int i) {
-
-   }
-
-   @Override
-   public void onMessageReceived(MessageEvent messageEvent) {
-//      Toast.makeText(this, "message Received", Toast.LENGTH_SHORT).show();
+      });
    }
 }
