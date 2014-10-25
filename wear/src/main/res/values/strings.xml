@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">SoundApp</string>
-    <string name="hello_round">Hello Round World!</string>
+    <string name="record">Record!</string>
+    <string name="stop">Stop!</string>
     <string name="hello_square">Hello Square World!</string>
 
 </resources>
