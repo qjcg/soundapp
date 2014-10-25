@@ -2,8 +2,12 @@ package soundapp.com.hackathon.soundapp.soundapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.io.File;
 
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
@@ -16,6 +20,17 @@ import com.google.android.gms.wearable.MessageEvent;
 
 
 public class MainActivity extends Activity implements DataApi.DataListener{
+
+
+    public void applyFilter1 (View view) {
+        Log.d("soundapp", "applyFilter1");
+    }
+    public void applyFilter2 (View view) {
+        Log.d("soundapp", "applyFilter2");
+    }
+    public void playSound (View view) {
+        Log.d("soundapp", "play");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

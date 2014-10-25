@@ -1,0 +1,95 @@
+package soundapp.com.hackathon.soundapp.soundapp;
+
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.Environment;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+/**
+ * Created by niluge on 25/10/14.
+ */
+public class ARRecorder implements  Recorder {
+    boolean recording = false;
+    AudioRecord audioRecord;
+    private static final int RECORDER_SAMPLERATE = 44100;
+    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_DEFAULT;
+
+    String mFileName;
+
+    ARRecorder(String fileName) {
+        this.mFileName = fileName;
+    }
+
+    int bufSize = 1024 * 4;// AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING);
+    private Thread recordingThread;
+
+    @Override
+    public boolean isRecording() {
+        return recording;
+    }
+
+    @Override
+    public void stopRecording() {
+        // stops the recording activity
+        if (audioRecord != null) {
+            recording = false;
+            audioRecord.stop();
+            audioRecord.release();
+            audioRecord = null;
+        }
+    }
+    @Override
+    public void startRecording() {
+
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                RECORDER_SAMPLERATE, RECORDER_CHANNELS,
+                RECORDER_AUDIO_ENCODING, bufSize);
+
+        audioRecord.startRecording();
+        recording = true;
+        recordingThread = new Thread(new Runnable() {
+            public void run() {
+                writeAudioDataToFile();
+            }
+        }, "AudioRecorder Thread");
+        recordingThread.start();
+    }
+
+    private void writeAudioDataToFile() {
+        // Write the output audio in byte
+
+        byte bytes[] = new byte[bufSize];
+
+        FileOutputStream os = null;
+        try {
+            os = new FileOutputStream(mFileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (recording) {
+            // gets the voice output from microphone to byte format
+
+            int read = audioRecord.read(bytes, 0, bytes.length);
+            try {
+                // // writes the data to file from buffer
+                // // stores the voice buffer
+                if (read > 0) {
+                    os.write(bytes, 0, read);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">SoundApp</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="applyFilter1">Filter1</string>
+    <string name="applyFilter2">Filter2</string>
+    <string name="play">Play!</string>
 
 </resources>
