@@ -3,6 +3,7 @@ package soundapp.hackathon.com.soundapp;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created by john on 25/10/14.
