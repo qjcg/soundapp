@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="soundapp.com.hackathon.soundapp.soundapp" >
 
+    <!-- GPS User Permission -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
