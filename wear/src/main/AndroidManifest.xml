@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.github.qjcg.soundapp.AudioService" />
-        <service android:name="com.github.qjcp.soundapp.common.SoundFilterIntentService" />
+        <service android:name="com.github.qjcg.soundapp.common.AudioService" />
+        <service android:name="com.github.qjcg.soundapp.common.SoundFilterIntentService" />
 
         <meta-data
             android:name="com.google.android.gms.version"

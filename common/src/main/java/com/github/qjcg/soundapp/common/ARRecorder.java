@@ -1,4 +1,4 @@
-package com.github.qjcg.soundapp;
+package com.github.qjcg.soundapp.common;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -13,7 +13,7 @@ import java.io.InputStream;
 /**
  * Created by niluge on 25/10/14.
  */
-public class ARRecorder implements  Recorder {
+public class ARRecorder implements Recorder {
     boolean recording = false;
     AudioRecord audioRecord;
     private static final int RECORDER_SAMPLERATE = 44100;
@@ -22,7 +22,7 @@ public class ARRecorder implements  Recorder {
 
     String mFileName;
 
-    ARRecorder(String fileName) {
+    public ARRecorder(String fileName) {
         this.mFileName = fileName;
     }
 

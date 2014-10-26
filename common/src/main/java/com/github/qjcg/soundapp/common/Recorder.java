@@ -1,4 +1,4 @@
-package com.github.qjcg.soundapp;
+package com.github.qjcg.soundapp.common;
 
 /**
  * Created by niluge on 25/10/14.
