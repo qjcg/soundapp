@@ -6,19 +6,22 @@
     tools:context=".MainActivity"
     tools:deviceIds="wear_round">
 
-    <Button
+    <ImageButton
         android:id="@+id/record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:onClick="toggleRecording"
+        android:src="@drawable/ic_action_mic"
         android:text="Record" />
 
     <Button
         android:id="@+id/sendMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/record"
+        android:layout_centerHorizontal="true"
+        android:onClick="sendMessage"
         android:text="Send Message" />
 
 </RelativeLayout>
