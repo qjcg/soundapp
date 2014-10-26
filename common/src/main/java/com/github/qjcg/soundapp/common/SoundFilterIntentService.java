@@ -87,7 +87,7 @@ public class SoundFilterIntentService extends IntentService {
         }
         mAudioPlayer = MediaPlayer.create(this, Uri.parse(filename));
         mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
-        mReverb.setPreset(PresetReverb.PRESET_LARGEROOM);
+        mReverb.setPreset(PresetReverb.PRESET_LARGEHALL);
         mReverb.setEnabled(true);
         //mAudioPlayer.attachAuxEffect(mReverb.getId());
         mAudioPlayer.setAuxEffectSendLevel(1.0f);
