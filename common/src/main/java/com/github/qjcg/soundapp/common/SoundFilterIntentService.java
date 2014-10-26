@@ -2,8 +2,14 @@ package com.github.qjcg.soundapp.common;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.audiofx.PresetReverb;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 /**
  * Created by john on 25/10/14.
@@ -67,5 +73,27 @@ public class SoundFilterIntentService extends IntentService {
 
         int filter = intent.getIntExtra(EXTRA_FILTER_TYPE, 1);
         Log.d(LOG_TAG, "Using filter: " + filter);
+        playSound(mFileName);
+    }
+
+    protected void playSound(String filename) {
+        MediaPlayer mMediaPlayer = new MediaPlayer();
+        try {
+            mMediaPlayer.setDataSource(this, Uri.parse(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        PresetReverb mReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+        mReverb.setPreset(PresetReverb.PRESET_LARGEROOM);
+        mReverb.setEnabled(true);
+        mMediaPlayer.attachAuxEffect(mReverb.getId());
+        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+        try {
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
