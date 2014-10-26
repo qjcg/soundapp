@@ -1,10 +1,12 @@
 package com.github.qjcg.soundapp;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ public class MainActivity extends Activity {
     Recorder recorder = new ARRecorder(mFileName);
     PhoneClient client;
 
+    ObjectAnimator recordBtnAnimator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,14 +37,24 @@ public class MainActivity extends Activity {
         apiClient.connect();
         client = new PhoneClient(apiClient);
 
+
     }
 
     public void toggleRecording(View view) {
         if (!recorder.isRecording()) {
             recorder.startRecording();
             ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
+
+           recordBtnAnimator = ObjectAnimator.ofFloat(view, "alpha", 0.5f, 1f).setDuration(500);
+           recordBtnAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+           recordBtnAnimator.setRepeatMode(ObjectAnimator.REVERSE);
+           recordBtnAnimator.start();
+
         } else {
             ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
+
+           recordBtnAnimator.cancel();
+           ObjectAnimator.ofFloat(view, "alpha", 1).setDuration(500).start();
 
             recorder.stopRecording();
             MediaPlayer player = new MediaPlayer();
@@ -55,6 +69,5 @@ public class MainActivity extends Activity {
 
     public void sendMessage(View view) {
         client.sendSound(null);
-
     }
 }
