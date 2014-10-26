@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SoundApp</string>
     <string name="record">Record!</string>
     <string name="stop">Stop!</string>
     <string name="hello_square">Hello Square World!</string>
