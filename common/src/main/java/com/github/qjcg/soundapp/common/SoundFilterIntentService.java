@@ -2,7 +2,9 @@ package com.github.qjcg.soundapp.common;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.media.AudioRecord;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.media.audiofx.PresetReverb;
 import android.net.Uri;
 import android.os.IBinder;
@@ -78,13 +80,15 @@ public class SoundFilterIntentService extends IntentService {
 
         int filter = intent.getIntExtra(EXTRA_FILTER_TYPE, 1);
         Log.d(LOG_TAG, "Using filter: " + filter);
-        mFileName = "/sdcard/soundapp/1.wav";
-//        resampleAudioFile(mFileName, mFileName +"_resampled.wav");
+//        mFileName = "/sdcard/soundapp/1.wav";
+//        resampleAudioFile(mFileName, mFileName + "_resampled.wav");
         playSound(mFileName);
     }
 
     protected void playSound(String filename) {
         if (mAudioPlayer != null) {
+            onDestroy();
+            mAudioPlayer.stop();
             mAudioPlayer.release();
             mAudioPlayer = null;
         }
@@ -93,18 +97,22 @@ public class SoundFilterIntentService extends IntentService {
             mReverb = null;
         }
         mAudioPlayer = MediaPlayer.create(this, Uri.parse(filename));
-        mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
-        mReverb.setPreset(PresetReverb.PRESET_LARGEHALL);
-        mReverb.setEnabled(true);
-        //mAudioPlayer.attachAuxEffect(mReverb.getId());
-        mAudioPlayer.setAuxEffectSendLevel(1.0f);
+        try {
+            mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
+            mReverb.setPreset(PresetReverb.PRESET_LARGEHALL);
+            mReverb.setEnabled(true);
+            //mAudioPlayer.attachAuxEffect(mReverb.getId());
+            mAudioPlayer.setAuxEffectSendLevel(1.0f);
 
-        mAudioPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-            }
-        });
+            mAudioPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -115,7 +123,7 @@ public class SoundFilterIntentService extends IntentService {
      * @param byte1
      * @return a short with the two bytes swapped
      */
-    private static short swapBytes(byte byte0, byte byte1) {
+    private static short concatBytes(byte byte0, byte byte1) {
         return (short) ((byte1 & 0xff) << 8 | (byte0 & 0xff));
     }
 
@@ -166,11 +174,14 @@ public class SoundFilterIntentService extends IntentService {
 
         byte[] outputByteArray = sampleToByteArray(sample, false);
 
-        for (int i = 0, j = 0; i < outputByteArray.length; i += 2, j++) {
+        for (int i = 0, j = 0; i < outputByteArray.length - 4; i += 2, j++) {
+            if (j >= outputArray.length) {
+                continue;
+            }
             if (swap) {
-                outputArray[j] = swapBytes(outputByteArray[i], outputByteArray[i + 1]);
+                outputArray[j] = concatBytes(outputByteArray[i], outputByteArray[i + 1]);
             } else {
-                outputArray[j] = swapBytes(outputByteArray[i + 1], outputByteArray[i]);
+                outputArray[j] = concatBytes(outputByteArray[i + 1], outputByteArray[i]);
             }
         }
         return outputArray;
@@ -225,7 +236,15 @@ public class SoundFilterIntentService extends IntentService {
 
                 output[i] = outputSample;
             }
-            shortArrayToFile(output, outputFilename);
+            //shortArrayToFile(output, outputFilename);
+            AudioRecord ar;
+            ar = new AudioRecord(MediaRecorder.AudioSource.DEFAULT,
+                    ARRecorder.RECORDER_SAMPLERATE, ARRecorder.RECORDER_CHANNELS,
+                    ARRecorder.RECORDER_AUDIO_ENCODING, ARRecorder.bufSize);
+            ar.startRecording();
+            ar.read(output, 0, output.length);
+            ar.stop();
+            ar.release();
         } catch (IOException e) {
             e.printStackTrace();
 

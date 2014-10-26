@@ -16,9 +16,9 @@ import java.io.InputStream;
 public class ARRecorder implements Recorder {
     boolean recording = false;
     AudioRecord audioRecord;
-    private static final int RECORDER_SAMPLERATE = 44100;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    public static final int RECORDER_SAMPLERATE = 44100;
+    public static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    public static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     String mFileName;
 
@@ -26,7 +26,7 @@ public class ARRecorder implements Recorder {
         this.mFileName = fileName;
     }
 
-    int bufSize = 1024 * 4;// AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING);
+    public static int bufSize = 1024 * 4;// AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING);
     private Thread recordingThread;
 
     @Override
