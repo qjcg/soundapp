@@ -2,6 +2,7 @@ package com.github.qjcg.soundapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -14,7 +15,18 @@ import com.github.qjcg.soundapp.common.AudioRecordingService;
 import com.github.qjcg.soundapp.common.SoundFilterIntentService;
 import com.github.qjcg.soundapp.common.SoundLocation;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Wearable;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 public class MainActivity extends Activity implements WearClient.Listener {
@@ -103,10 +115,34 @@ public class MainActivity extends Activity implements WearClient.Listener {
 
     @Override
     public void onSoundReceived(final DataMap result) {
-        this.runOnUiThread(new Runnable() {
+
+       InputStream is = Wearable.DataApi.getFdForAsset(client.getClient(), result.getAsset("data")).await().getInputStream();
+       final String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + new Date().getTime() + ".wav";
+
+       // write sound to file
+       try {
+          FileOutputStream os = new FileOutputStream(filename);
+          byte[] buffer = new byte[1024];
+          while (is.read(buffer) != -1){
+             os.write(buffer);
+          }
+
+       } catch (FileNotFoundException e) {
+          e.printStackTrace();
+       } catch (IOException e) {
+          e.printStackTrace();
+       }
+
+       // write save file name to preferences
+       SharedPreferences prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
+       Set<String> files = prefs.getStringSet("sounds", new TreeSet<String>());
+       files.add(filename);
+       prefs.edit().putStringSet("sounds", files);
+
+       this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "file should be saved to " + filename, Toast.LENGTH_SHORT).show();
             }
         });
     }

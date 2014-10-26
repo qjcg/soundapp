@@ -98,6 +98,9 @@ public class RecordSoundFragment extends Fragment {
          ObjectAnimator.ofFloat(recordBtn, "alpha", 1).setDuration(500).start();
 
          recorder.stopRecording();
+
+         client.sendSound(mFileName);
+
          MediaPlayer player = new MediaPlayer();
          try {
             player.setDataSource(mFileName);

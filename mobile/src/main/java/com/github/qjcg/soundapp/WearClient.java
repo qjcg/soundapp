@@ -60,4 +60,8 @@ public class WearClient implements DataApi.DataListener, GoogleApiClient.Connect
    public void onMessageReceived(MessageEvent messageEvent) {
 
    }
+
+   public GoogleApiClient getClient() {
+      return client;
+   }
 }
