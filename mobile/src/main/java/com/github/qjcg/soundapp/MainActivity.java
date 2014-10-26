@@ -3,6 +3,7 @@ package com.github.qjcg.soundapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -32,27 +33,28 @@ import java.util.TreeSet;
 public class MainActivity extends Activity {
 
     String mFileName;
+    String testFilename = "/storage/sdcard0/soundapp/test.wav";
     boolean isRecording = false;
 
     private SoundLocation mLocation;
 
     public void applyHappyFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_HAPPY);
         startService(i);
     }
 
     public void applyDarkFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_DARK);
         startService(i);
     }
 
     public void applyEchoFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_ECHO);
         startService(i);
     }
@@ -86,6 +88,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+       Uri dataUri = getIntent().getData();
+       if(dataUri != null){
+          testFilename = dataUri.getPath();
+       }
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest" + System.currentTimeMillis() + ".mp3";
         mLocation = new SoundLocation(this);
