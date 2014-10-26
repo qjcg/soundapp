@@ -6,9 +6,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.wearable.view.WatchViewStub;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.github.qjcg.soundapp.R;
@@ -22,11 +24,14 @@ import java.io.IOException;
 
 public class RecordSoundFragment extends Fragment {
 
+   public final static String ARG_START_RECORDING = "START_RECORDING";
+
    String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.wav";
    Recorder recorder = new ARRecorder(mFileName);
    PhoneClient client;
 
    ObjectAnimator recordBtnAnimator;
+   ImageButton recordBtn ;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -42,24 +47,55 @@ public class RecordSoundFragment extends Fragment {
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      return inflater.inflate(R.layout.record_sound, container, false);
+
+      WatchViewStub stub = (WatchViewStub) inflater.inflate(R.layout.record_sound, container, false);
+
+      stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+         @Override
+         public void onLayoutInflated(WatchViewStub stub) {
+            recordBtn = (ImageButton) stub.findViewById(R.id.record);
+            recordBtn.setOnClickListener(new View.OnClickListener(){
+
+               @Override
+               public void onClick(View v) {
+                  toggleRecording();
+               }
+            });
+
+            stub.findViewById(R.id.sendMessage).setOnClickListener(new View.OnClickListener(){
+               @Override
+               public void onClick(View v) {
+                  sendMessage();
+               }
+            });
+
+            Bundle args = getArguments();
+            if(args != null){
+               if(args.getBoolean(ARG_START_RECORDING, false)){
+                  toggleRecording();
+               }
+            }
+         }
+      });
+
+      return stub;
    }
 
-   public void toggleRecording(View view) {
+   public void toggleRecording() {
       if (!recorder.isRecording()) {
          recorder.startRecording();
-         ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
+         recordBtn.setImageResource(R.drawable.ic_action_stop);
 
-         recordBtnAnimator = ObjectAnimator.ofFloat(view, "alpha", 0.5f, 1f).setDuration(500);
+         recordBtnAnimator = ObjectAnimator.ofFloat(recordBtn, "alpha", 0.5f, 1f).setDuration(500);
          recordBtnAnimator.setRepeatCount(ObjectAnimator.INFINITE);
          recordBtnAnimator.setRepeatMode(ObjectAnimator.REVERSE);
          recordBtnAnimator.start();
 
       } else {
-         ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
+         recordBtn.setImageResource(R.drawable.ic_action_mic);
 
          recordBtnAnimator.cancel();
-         ObjectAnimator.ofFloat(view, "alpha", 1).setDuration(500).start();
+         ObjectAnimator.ofFloat(recordBtn, "alpha", 1).setDuration(500).start();
 
          recorder.stopRecording();
          MediaPlayer player = new MediaPlayer();
@@ -72,7 +108,7 @@ public class RecordSoundFragment extends Fragment {
       }
    }
 
-   public void sendMessage(View view) {
+   public void sendMessage() {
       client.sendSound(null);
    }
 
