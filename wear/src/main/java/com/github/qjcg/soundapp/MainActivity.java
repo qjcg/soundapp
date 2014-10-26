@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.github.qjcg.soundapp.common.ARRecorder;
@@ -37,9 +38,9 @@ public class MainActivity extends Activity {
     public void toggleRecording(View view) {
         if (!recorder.isRecording()) {
             recorder.startRecording();
-            ((TextView) view).setText(R.string.stop);
+            ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
         } else {
-            ((TextView) view).setText(R.string.record);
+            ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
 
             recorder.stopRecording();
             MediaPlayer player = new MediaPlayer();
