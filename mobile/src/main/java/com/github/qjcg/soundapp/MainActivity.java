@@ -26,14 +26,23 @@ public class MainActivity extends Activity implements WearClient.Listener {
     private SoundLocation mLocation;
 
     public void applyHappyFilter(View view) {
-        Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, SoundFilterIntentService.class);
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_HAPPY);
         startService(i);
     }
 
     public void applyDarkFilter(View view) {
-        Toast.makeText(this.getApplicationContext(), "applyDarkFilter", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, SoundFilterIntentService.class);
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_DARK);
+        startService(i);
+    }
+
+    public void applyEchoFilter(View view) {
+        Intent i = new Intent(this, SoundFilterIntentService.class);
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_ECHO);
         startService(i);
     }
 
@@ -61,11 +70,6 @@ public class MainActivity extends Activity implements WearClient.Listener {
         }
     }
 
-    public void applyEchoFilter(View view) {
-        Toast.makeText(this.getApplicationContext(), "applyEchoFilter", Toast.LENGTH_LONG).show();
-        Intent i = new Intent(this, SoundFilterIntentService.class);
-        startService(i);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

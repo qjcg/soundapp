@@ -9,6 +9,16 @@ import android.util.Log;
  * Created by john on 25/10/14.
  */
 public class SoundFilterIntentService extends IntentService {
+    private String mFileName;
+    public static final String EXTRA_FILENAME = "extra_filename";
+    public static final String EXTRA_FILTER_TYPE = "extra_filter_type";
+
+    public static final int FILTER_HAPPY = 1;
+    public static final int FILTER_DARK = 2;
+    public static final int FILTER_ECHO = 3;
+
+    public static final String LOG_TAG = "soundapp";
+
     public SoundFilterIntentService(String name) {
         super(name);
     }
@@ -49,6 +59,13 @@ public class SoundFilterIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("blah", "onHandleIntent");
+        mFileName = intent.getStringExtra(EXTRA_FILENAME);
+        if (mFileName == null) {
+            Log.e(LOG_TAG, "Missing filename, can't apply a filter!");
+            return;
+        }
+
+        int filter = intent.getIntExtra(EXTRA_FILTER_TYPE, 1);
+        Log.d(LOG_TAG, "Using filter: " + filter);
     }
 }
