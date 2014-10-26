@@ -12,6 +12,7 @@ import android.util.Log;
 public class SoundLocation implements LocationListener {
     private LocationManager locationManager;
     private String provider;
+    private Location location;
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -33,8 +34,12 @@ public class SoundLocation implements LocationListener {
         Log.d("SoundApp", "onLocationChange: " + "Latitude: " + location.getLatitude() + " | Longitude: " + location.getLongitude());
         int lat = (int) (location.getLatitude());
         int lng = (int) (location.getLongitude());
-
+        location = location;
         // code what you need
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }
 
