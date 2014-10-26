@@ -12,7 +12,7 @@ public class MRRecorder implements Recorder {
     boolean recording = false;
     private MediaRecorder mRecorder;
     private String mFileName;
-    MRRecorder(String fileName) {
+    public MRRecorder(String fileName) {
         this.mFileName = fileName;
     }
 
