@@ -8,12 +8,13 @@ import android.support.wearable.view.WatchViewStub;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.qjcg.soundapp.common.ARRecorder;
+import com.github.qjcg.soundapp.common.Recorder;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
 
 import java.io.IOException;
 
-import com.github.qjcg.soundapp.R;
 import com.github.qjcg.soundapp.utilities.PhoneClient;
 
 public class MainActivity extends Activity {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.qjcg.soundapp;
+package com.github.qjcg.soundapp.common;
 
 import java.io.IOException;
 import java.io.InputStream;

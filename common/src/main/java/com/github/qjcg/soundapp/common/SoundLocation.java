@@ -1,4 +1,4 @@
-package com.github.qjcg.soundapp;
+package com.github.qjcg.soundapp.common;
 
 import android.location.Location;
 import android.location.LocationListener;

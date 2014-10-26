@@ -5,7 +5,4 @@
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher" />
 
-    <service android:name=".AudioService" />
-    <service android:name=".SoundFilterIntentService" />
-
 </manifest>

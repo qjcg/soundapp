@@ -1,12 +1,14 @@
 package com.github.qjcg.soundapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.qjcg.soundapp.common.SoundFilterIntentService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 
@@ -17,18 +19,28 @@ public class MainActivity extends Activity implements WearClient.Listener {
 
     public void applyHappyFilter (View view) {
         Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
+        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        startService(i);
     }
 
     public void applyDarkFilter (View view) {
         Toast.makeText(this.getApplicationContext(), "applyDarkFilter", Toast.LENGTH_LONG).show();
+        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        startService(i);
     }
 
     public void playSound (View view) {
         Toast.makeText(this.getApplicationContext(), "playSound", Toast.LENGTH_LONG).show();
     }
 
+    public void recordSound (View view) {
+        Toast.makeText(this.getApplicationContext(), "recordSound", Toast.LENGTH_LONG).show();
+    }
+
     public void applyEchoFilter (View view) {
         Toast.makeText(this.getApplicationContext(), "applyEchoFilter", Toast.LENGTH_LONG).show();
+        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        startService(i);
     }
 
     @Override

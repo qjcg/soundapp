@@ -1,4 +1,4 @@
-package com.github.qjcg.soundapp;
+package com.github.qjcg.soundapp.common;
 
 import android.app.IntentService;
 import android.content.Intent;
