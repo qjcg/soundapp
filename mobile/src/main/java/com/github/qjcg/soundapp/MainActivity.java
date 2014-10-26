@@ -3,6 +3,7 @@ package com.github.qjcg.soundapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -29,31 +30,31 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-public class MainActivity extends Activity implements WearClient.Listener {
+public class MainActivity extends Activity {
 
     String mFileName;
+    String testFilename = "/storage/sdcard0/soundapp/test.wav";
     boolean isRecording = false;
 
-    WearClient client;
     private SoundLocation mLocation;
 
     public void applyHappyFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_HAPPY);
         startService(i);
     }
 
     public void applyDarkFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_DARK);
         startService(i);
     }
 
     public void applyEchoFilter(View view) {
         Intent i = new Intent(this, SoundFilterIntentService.class);
-        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, "/storage/sdcard0/soundapp/test.wav");
+        i.putExtra(SoundFilterIntentService.EXTRA_FILENAME, testFilename);
         i.putExtra(SoundFilterIntentService.EXTRA_FILTER_TYPE, SoundFilterIntentService.FILTER_ECHO);
         startService(i);
     }
@@ -88,7 +89,11 @@ public class MainActivity extends Activity implements WearClient.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        client = new WearClient(new GoogleApiClient.Builder(this), this);
+       Uri dataUri = getIntent().getData();
+       if(dataUri != null){
+          testFilename = dataUri.getPath();
+       }
+
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest" + System.currentTimeMillis() + ".mp3";
         mLocation = new SoundLocation(this);
     }
@@ -113,37 +118,4 @@ public class MainActivity extends Activity implements WearClient.Listener {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSoundReceived(final DataMap result) {
-
-       InputStream is = Wearable.DataApi.getFdForAsset(client.getClient(), result.getAsset("data")).await().getInputStream();
-       final String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + new Date().getTime() + ".wav";
-
-       // write sound to file
-       try {
-          FileOutputStream os = new FileOutputStream(filename);
-          byte[] buffer = new byte[1024];
-          while (is.read(buffer) != -1){
-             os.write(buffer);
-          }
-
-       } catch (FileNotFoundException e) {
-          e.printStackTrace();
-       } catch (IOException e) {
-          e.printStackTrace();
-       }
-
-       // write save file name to preferences
-       SharedPreferences prefs = this.getSharedPreferences("prefs", MODE_PRIVATE);
-       Set<String> files = prefs.getStringSet("sounds", new TreeSet<String>());
-       files.add(filename);
-       prefs.edit().putStringSet("sounds", files);
-
-       this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, "file should be saved to " + filename, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }
