@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@null"
-            android:onClick="applyHappyFilter"
-            android:src="@drawable/happy"
+            android:onClick="shareFile"
+            android:src="@drawable/ic_action_share"
             android:text="@string/play" />
 
         <ImageButton

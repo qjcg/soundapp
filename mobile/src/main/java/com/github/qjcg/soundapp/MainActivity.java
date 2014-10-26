@@ -15,6 +15,8 @@ import com.github.qjcg.soundapp.common.AudioRecordingService;
 import com.github.qjcg.soundapp.common.SoundFilterIntentService;
 import com.github.qjcg.soundapp.common.SoundLocation;
 
+import java.net.URI;
+
 
 public class MainActivity extends Activity {
 
@@ -90,6 +92,19 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void shareFile(View view){
+        if(mFileName == null){
+            return;
+        }
+        Intent i = new Intent();
+        Uri myUri = Uri.parse(mFileName);
+        i.setAction(Intent.ACTION_SEND);
+//        i.setData( myUri);
+        i.putExtra(Intent.EXTRA_STREAM, myUri);
+
+        i.setType("audio/wav");
+        startActivity(i);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
