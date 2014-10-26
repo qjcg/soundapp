@@ -7,11 +7,22 @@
 
     <ImageButton
         android:id="@+id/record"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_mic"
+        android:text="Record"
+        />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_action_mic"
-        android:text="Record" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Recording..."
+        android:id="@+id/textView"
+        android:layout_below="@+id/record"
+        android:layout_centerHorizontal="true"
+        android:alpha="0"/>
 
 
 </RelativeLayout>

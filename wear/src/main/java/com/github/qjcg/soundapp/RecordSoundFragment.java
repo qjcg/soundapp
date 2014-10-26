@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.github.qjcg.soundapp.R;
 import com.github.qjcg.soundapp.common.ARRecorder;
@@ -32,6 +33,7 @@ public class RecordSoundFragment extends Fragment {
 
    ObjectAnimator recordBtnAnimator;
    ImageButton recordBtn ;
+   TextView textView;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class RecordSoundFragment extends Fragment {
          }
       });
 
+      textView = (TextView) v.findViewById(R.id.textView);
+
       Bundle args = getArguments();
       if(args != null){
          if(args.getBoolean(ARG_START_RECORDING, false)){
@@ -72,18 +76,18 @@ public class RecordSoundFragment extends Fragment {
    public void toggleRecording() {
       if (!recorder.isRecording()) {
          recorder.startRecording();
-         recordBtn.setImageResource(R.drawable.ic_action_stop);
+         recordBtn.setImageResource(R.drawable.ic_stop);
 
-         recordBtnAnimator = ObjectAnimator.ofFloat(recordBtn, "alpha", 0.5f, 1f).setDuration(500);
+         recordBtnAnimator = ObjectAnimator.ofFloat(textView, "alpha", 0.5f, 1f).setDuration(500);
          recordBtnAnimator.setRepeatCount(ObjectAnimator.INFINITE);
          recordBtnAnimator.setRepeatMode(ObjectAnimator.REVERSE);
          recordBtnAnimator.start();
 
       } else {
-         recordBtn.setImageResource(R.drawable.ic_action_mic);
+         recordBtn.setImageResource(R.drawable.ic_mic);
 
          recordBtnAnimator.cancel();
-         ObjectAnimator.ofFloat(recordBtn, "alpha", 1).setDuration(500).start();
+         ObjectAnimator.ofFloat(textView, "alpha", 0).setDuration(500).start();
 
          recorder.stopRecording();
 
