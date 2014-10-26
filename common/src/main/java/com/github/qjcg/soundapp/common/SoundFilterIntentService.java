@@ -11,11 +11,11 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-/**
- * Created by john on 25/10/14.
- */
 public class SoundFilterIntentService extends IntentService {
     private String mFileName;
+    private MediaPlayer mAudioPlayer;
+    private PresetReverb mReverb;
+
     public static final String EXTRA_FILENAME = "extra_filename";
     public static final String EXTRA_FILTER_TYPE = "extra_filter_type";
 
@@ -77,23 +77,26 @@ public class SoundFilterIntentService extends IntentService {
     }
 
     protected void playSound(String filename) {
-        MediaPlayer mMediaPlayer = new MediaPlayer();
-        try {
-            mMediaPlayer.setDataSource(this, Uri.parse(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
+        if (mAudioPlayer != null) {
+            mAudioPlayer.release();
+            mAudioPlayer = null;
         }
-        PresetReverb mReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+        if (mReverb != null) {
+            mReverb.release();
+            mReverb = null;
+        }
+        mAudioPlayer = MediaPlayer.create(this, Uri.parse(filename));
+        mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
         mReverb.setPreset(PresetReverb.PRESET_LARGEROOM);
         mReverb.setEnabled(true);
-        mMediaPlayer.attachAuxEffect(mReverb.getId());
-        mMediaPlayer.setAuxEffectSendLevel(1.0f);
-        try {
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //mAudioPlayer.attachAuxEffect(mReverb.getId());
+        mAudioPlayer.setAuxEffectSendLevel(1.0f);
+
+        mAudioPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+         });
     }
 }
