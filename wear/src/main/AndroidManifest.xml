@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="soundapp.com.hackathon.soundapp.soundapp" >
+    package="com.github.qjcg.soundapp" >
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.DeviceDefault" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.github.qjcg.soundapp.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
