@@ -13,3 +13,5 @@ record short clips &amp; apply FX
 # Links
 - [Live Hangout](http://whocl.com/9jy0O6) Disable micro & camera (bandwidth)
 
+# Slides
+- http://whocl.com/bp0WE7
