@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.github.qjcg.soundapp.common.AudioRecordingService;
 import com.github.qjcg.soundapp.common.SoundFilterIntentService;
+import com.github.qjcg.soundapp.common.SoundLocation;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 
@@ -22,6 +23,7 @@ public class MainActivity extends Activity implements WearClient.Listener {
     boolean isRecording = false;
 
     WearClient client;
+    private SoundLocation mLocation;
 
     public void applyHappyFilter(View view) {
         Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
@@ -40,7 +42,6 @@ public class MainActivity extends Activity implements WearClient.Listener {
     }
 
     public void recordSound(View view) {
-        Toast.makeText(this.getApplicationContext(), "recordSound", Toast.LENGTH_LONG).show();
         if (!isRecording) {
             ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
             Intent i = new Intent(this, AudioRecordingService.class);
@@ -51,6 +52,10 @@ public class MainActivity extends Activity implements WearClient.Listener {
             Intent i = new Intent(this, AudioRecordingService.class);
             stopService(i);
             ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
+            if (mLocation != null && mLocation.getLocation() != null) {
+                Toast.makeText(this, "TODO save location in the audio file metadata and somewhere else too.. (ie a database?)"
+                        + mLocation.getLocation().getLatitude() + " " + mLocation.getLocation().getLongitude() + " +/- " + mLocation.getLocation().getAccuracy(), Toast.LENGTH_LONG).show();
+            }
             this.playSound(null);
             isRecording = false;
         }
@@ -68,8 +73,8 @@ public class MainActivity extends Activity implements WearClient.Listener {
         setContentView(R.layout.activity_main);
 
         client = new WearClient(new GoogleApiClient.Builder(this), this);
-
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest" + System.currentTimeMillis() + ".mp3";
+        mLocation = new SoundLocation(this);
     }
 
 
