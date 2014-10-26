@@ -22,7 +22,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.github.qjcg.soundapp.common.AudioService" />
+        <activity
+            android:name="com.github.qjcg.soundapp.common.StopAudioRecorderActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <service android:name="com.github.qjcg.soundapp.common.AudioRecordingService" />
         <service android:name="com.github.qjcg.soundapp.common.SoundFilterIntentService" />
 
         <meta-data

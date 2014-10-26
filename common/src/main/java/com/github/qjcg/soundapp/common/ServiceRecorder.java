@@ -29,7 +29,7 @@ public class ServiceRecorder implements Recorder {
     @Override
     public void startRecording() {
         recording = true;
-        context.startService(new Intent(context, AudioService.class));
+        context.startService(new Intent(context, AudioRecordingService.class));
     }
 
 }

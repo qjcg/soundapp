@@ -3,11 +3,14 @@ package com.github.qjcg.soundapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.github.qjcg.soundapp.common.AudioRecordingService;
 import com.github.qjcg.soundapp.common.SoundFilterIntentService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
@@ -15,31 +18,47 @@ import com.google.android.gms.wearable.DataMap;
 
 public class MainActivity extends Activity implements WearClient.Listener {
 
-      WearClient client;
+    String mFileName;
+    boolean isRecording = false;
 
-    public void applyHappyFilter (View view) {
+    WearClient client;
+
+    public void applyHappyFilter(View view) {
         Toast.makeText(this.getApplicationContext(), "applyHappyFilter", Toast.LENGTH_LONG).show();
-        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        Intent i = new Intent(this, SoundFilterIntentService.class);
         startService(i);
     }
 
-    public void applyDarkFilter (View view) {
+    public void applyDarkFilter(View view) {
         Toast.makeText(this.getApplicationContext(), "applyDarkFilter", Toast.LENGTH_LONG).show();
-        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        Intent i = new Intent(this, SoundFilterIntentService.class);
         startService(i);
     }
 
-    public void playSound (View view) {
+    public void playSound(View view) {
         Toast.makeText(this.getApplicationContext(), "playSound", Toast.LENGTH_LONG).show();
     }
 
-    public void recordSound (View view) {
+    public void recordSound(View view) {
         Toast.makeText(this.getApplicationContext(), "recordSound", Toast.LENGTH_LONG).show();
+        if (!isRecording) {
+            ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
+            Intent i = new Intent(this, AudioRecordingService.class);
+            i.putExtra(AudioRecordingService.EXTRA_FILENAME, mFileName);
+            startService(i);
+            isRecording = true;
+        } else {
+            Intent i = new Intent(this, AudioRecordingService.class);
+            stopService(i);
+            ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
+            this.playSound(null);
+            isRecording = false;
+        }
     }
 
-    public void applyEchoFilter (View view) {
+    public void applyEchoFilter(View view) {
         Toast.makeText(this.getApplicationContext(), "applyEchoFilter", Toast.LENGTH_LONG).show();
-        Intent i  = new Intent(this, SoundFilterIntentService.class);
+        Intent i = new Intent(this, SoundFilterIntentService.class);
         startService(i);
     }
 
@@ -48,7 +67,9 @@ public class MainActivity extends Activity implements WearClient.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       client = new WearClient(new GoogleApiClient.Builder(this), this);
+        client = new WearClient(new GoogleApiClient.Builder(this), this);
+
+        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest" + System.currentTimeMillis() + ".mp3";
     }
 
 
@@ -71,13 +92,13 @@ public class MainActivity extends Activity implements WearClient.Listener {
         return super.onOptionsItemSelected(item);
     }
 
-   @Override
-   public void onSoundReceived( final DataMap result) {
-      this.runOnUiThread(new Runnable() {
-         @Override
-         public void run() {
-            Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
-         }
-      });
-   }
+    @Override
+    public void onSoundReceived(final DataMap result) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, result.getString("data"), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
