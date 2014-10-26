@@ -46,9 +46,6 @@ public class PhoneClient {
             for(String nodeId : nodes){
                MessageApi.SendMessageResult msgResult = Wearable.MessageApi.sendMessage(
                        client, nodeId,"/sound", null).await();
-               if (!msgResult.getStatus().isSuccess()) {
-                  Log.e("Soundapp", "ERROR: failed to send Message: " + result.getStatus());
-               }
             }
 
             return null;
