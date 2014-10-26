@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:background="@null"
             android:onClick="recordSound"
-            android:src="@android:drawable/ic_media_pause" />
+            android:src="@drawable/ic_action_mic" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_gravity="center"
             android:background="@null"
             android:onClick="playSound"
-            android:src="@android:drawable/ic_media_play" />
+            android:src="@drawable/ic_action_play" />
     </TableRow>
 
     <TableRow
