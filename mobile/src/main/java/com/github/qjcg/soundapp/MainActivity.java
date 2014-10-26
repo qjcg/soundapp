@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.qjcp.soundapp.common.SoundFilterIntentService;
+import com.github.qjcg.soundapp.common.SoundFilterIntentService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 
@@ -31,8 +31,10 @@ public class MainActivity extends Activity implements WearClient.Listener {
 
     public void playSound (View view) {
         Toast.makeText(this.getApplicationContext(), "playSound", Toast.LENGTH_LONG).show();
-        Intent i  = new Intent(this, SoundFilterIntentService.class);
-        startService(i);
+    }
+
+    public void recordSound (View view) {
+        Toast.makeText(this.getApplicationContext(), "recordSound", Toast.LENGTH_LONG).show();
     }
 
     public void applyEchoFilter (View view) {
