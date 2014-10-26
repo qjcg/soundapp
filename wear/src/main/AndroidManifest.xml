@@ -24,7 +24,8 @@
 
         <activity
             android:name="com.github.qjcg.soundapp.RecordASoundActivity"
-            android:label="Record a sound" >
+            android:label="Record a sound"
+            android:noHistory="true" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +36,8 @@
 
         <activity
             android:name="com.github.qjcg.soundapp.common.StopAudioRecorderActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:noHistory="true">
         </activity>
 
         <service android:name="com.github.qjcg.soundapp.common.AudioRecordingService" />
