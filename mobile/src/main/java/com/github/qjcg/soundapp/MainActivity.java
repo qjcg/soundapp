@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +42,6 @@ public class MainActivity extends Activity implements WearClient.Listener {
     }
 
     public void recordSound(View view) {
-        Toast.makeText(this.getApplicationContext(), "recordSound", Toast.LENGTH_LONG).show();
         if (!isRecording) {
             ((ImageButton) view).setImageResource(R.drawable.ic_action_stop);
             Intent i = new Intent(this, AudioRecordingService.class);
@@ -55,8 +53,8 @@ public class MainActivity extends Activity implements WearClient.Listener {
             stopService(i);
             ((ImageButton) view).setImageResource(R.drawable.ic_action_mic);
             if (mLocation != null && mLocation.getLocation() != null) {
-                Log.d("SoundApp", "TODO save location in the audio file metadata and somewhere else too.. (ie a database?)"
-                        + mLocation.getLocation().getLatitude() + " " + mLocation.getLocation().getLongitude());
+                Toast.makeText(this, "TODO save location in the audio file metadata and somewhere else too.. (ie a database?)"
+                        + mLocation.getLocation().getLatitude() + " " + mLocation.getLocation().getLongitude() + " +/- " + mLocation.getLocation().getAccuracy(), Toast.LENGTH_LONG).show();
             }
             this.playSound(null);
             isRecording = false;
@@ -76,7 +74,7 @@ public class MainActivity extends Activity implements WearClient.Listener {
 
         client = new WearClient(new GoogleApiClient.Builder(this), this);
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest" + System.currentTimeMillis() + ".mp3";
-        mLocation = new SoundLocation();
+        mLocation = new SoundLocation(this);
     }
 
 
