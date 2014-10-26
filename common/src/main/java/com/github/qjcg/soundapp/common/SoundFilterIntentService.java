@@ -79,7 +79,7 @@ public class SoundFilterIntentService extends IntentService {
         }
 
         int filter = intent.getIntExtra(EXTRA_FILTER_TYPE, 1);
-        Log.d(LOG_TAG, "Using filter: " + filter);
+        Log.d(LOG_TAG, "Using filter: " + filter + " on file "+ mFileName);
 //        mFileName = "/sdcard/soundapp/1.wav";
 //        resampleAudioFile(mFileName, mFileName + "_resampled.wav");
         playSound(mFileName);
@@ -98,11 +98,14 @@ public class SoundFilterIntentService extends IntentService {
         }
         mAudioPlayer = MediaPlayer.create(this, Uri.parse(filename));
         try {
-            mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
-            mReverb.setPreset(PresetReverb.PRESET_LARGEHALL);
-            mReverb.setEnabled(true);
+            if(mAudioPlayer == null){
+                return;
+            }
+//            mReverb = new PresetReverb(0, mAudioPlayer.getAudioSessionId());
+//            mReverb.setPreset(PresetReverb.PRESET_LARGEHALL);
+//            mReverb.setEnabled(true);
             //mAudioPlayer.attachAuxEffect(mReverb.getId());
-            mAudioPlayer.setAuxEffectSendLevel(1.0f);
+//            mAudioPlayer.setAuxEffectSendLevel(1.0f);
 
             mAudioPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -113,6 +116,21 @@ public class SoundFilterIntentService extends IntentService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        if (mAudioPlayer != null) {
+            mAudioPlayer.stop();
+            mAudioPlayer.release();
+            mAudioPlayer = null;
+        }
+        if (mReverb != null) {
+            mReverb.release();
+            mReverb = null;
+        }
+
+        return super.onUnbind(intent);
     }
 
     /**
