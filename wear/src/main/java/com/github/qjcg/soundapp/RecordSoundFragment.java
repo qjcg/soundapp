@@ -48,37 +48,25 @@ public class RecordSoundFragment extends Fragment {
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-      WatchViewStub stub = (WatchViewStub) inflater.inflate(R.layout.record_sound, container, false);
+      View v = inflater.inflate(R.layout.record_sound, container, false);
 
-      stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+      recordBtn = (ImageButton) v.findViewById(R.id.record);
+      recordBtn.setOnClickListener(new View.OnClickListener(){
+
          @Override
-         public void onLayoutInflated(WatchViewStub stub) {
-            recordBtn = (ImageButton) stub.findViewById(R.id.record);
-            recordBtn.setOnClickListener(new View.OnClickListener(){
-
-               @Override
-               public void onClick(View v) {
-                  toggleRecording();
-               }
-            });
-
-            stub.findViewById(R.id.sendMessage).setOnClickListener(new View.OnClickListener(){
-               @Override
-               public void onClick(View v) {
-                  sendMessage();
-               }
-            });
-
-            Bundle args = getArguments();
-            if(args != null){
-               if(args.getBoolean(ARG_START_RECORDING, false)){
-                  toggleRecording();
-               }
-            }
+         public void onClick(View v) {
+            toggleRecording();
          }
       });
 
-      return stub;
+      Bundle args = getArguments();
+      if(args != null){
+         if(args.getBoolean(ARG_START_RECORDING, false)){
+            toggleRecording();
+         }
+      }
+
+      return v;
    }
 
    public void toggleRecording() {
@@ -110,9 +98,4 @@ public class RecordSoundFragment extends Fragment {
          }
       }
    }
-
-   public void sendMessage() {
-      client.sendSound(null);
-   }
-
 }
